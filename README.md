@@ -22,3 +22,41 @@ optional arguments:
 
 ```
 
+## Flow example 
+
+```shell
+> python changelog.py -c "Initial import" -f init
+> python changelog.py -c "Added readme content" -f readme
+```
+
+will give this layout
+
+```text
+├── CHANGELOG.md
+├── README.md
+├── changelog.py
+└── changelogs/
+│  └──── unreleased/
+│     ├──── init.md
+│     └──── readme.md
+└── requirements.txt
+```
+
+And now releasing version 1.0.0 like this
+
+```shell
+> python changelog.py -r 1.0.0
+```
+
+will give this layout
+
+```text
+├── CHANGELOG.md
+├── README.md
+├── changelog.py
+└── requirements.txt
+```
+
+## Requirements
+
+* tested with python3

@@ -25,7 +25,7 @@ parser.add_argument('-f', '--filename',
 args = parser.parse_args()
 
 if args.create == args.release:
-    print 'Need one of --create or --release option'
+    print('Need one of --create or --release option')
     parser.print_help()
     exit(1)
 
