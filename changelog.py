@@ -15,7 +15,7 @@ parser.add_argument('-c', '--create',
 parser.add_argument('-r', '--release',
                     metavar='version',
                     type=str,
-                    help='releases the changelog byt gathering all entries')
+                    help='releases the changelog by gathering all entries')
 
 parser.add_argument('-f', '--filename', 
                     type=str,
