@@ -21,6 +21,10 @@ parser.add_argument('-f', '--filename',
                     type=str,
                     help='the filename to put the message in if you don\'t want to use the branch name')
 
+parser.add_argument('-t', '--commit',
+                    action='store_true',
+                    help='the filename to put the message in if you don\'t want to use the branch name')
+
 
 args = parser.parse_args()
 
@@ -39,12 +43,19 @@ filename += '.md'
 if args.create:
     if not os.path.isdir('changelogs/unreleased'):
         os.makedirs('changelogs/unreleased')
+    
+    changelog_entry_filepath = 'changelogs/unreleased/%s' % filename
 
-    f = open('changelogs/unreleased/%s' % filename,'w')
+    f = open(changelog_entry_filepath,'w')
     f.write(args.create)
     f.close()
-    subprocess.check_output(['git', 'add', 'changelogs/unreleased/%s' % filename])
-    print('Changelog entry added to \'changelogs/unreleased/%s\'' % filename)
+
+    subprocess.check_output(['git', 'add', changelog_entry_filepath])
+
+    if args.commit:
+        subprocess.check_output(['git', 'commit', '-m', 'Created changelog entry', changelog_entry_filepath])
+
+    print('Changelog entry added to \'%s\'' % changelog_entry_filepath)
 
 if args.release:
     if not os.path.isdir('changelogs/unreleased'):
@@ -72,7 +83,9 @@ if args.release:
         for filename in files:
             subprocess.check_output(['git', 'rm', '-f', 'changelogs/unreleased/%s' % filename])
 
-    subprocess.check_output(['git', 'commit', '-m', '"Created changelog entry for %s"' % args.release , changelog_filepath])
+    if args.commit:
+        subprocess.check_output(['git', 'commit', '-m', 'Created release entry for %s' % args.release, changelog_filepath])
+        
     print('Changelog entry for release \'%s\' added to changelog file \'%s\'' % (args.release, changelog_filepath))
 
 
