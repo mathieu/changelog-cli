@@ -19,7 +19,8 @@ optional arguments:
   -f FILENAME, --filename FILENAME
                         the filename to put the message in if you don't want
                         to use the branch name
-
+  -t, --commit          commit the created/deleted/modified files by this
+                        command
 ```
 
 ## Flow example 

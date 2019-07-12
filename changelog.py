@@ -23,7 +23,7 @@ parser.add_argument('-f', '--filename',
 
 parser.add_argument('-t', '--commit',
                     action='store_true',
-                    help='the filename to put the message in if you don\'t want to use the branch name')
+                    help='commit the created/deleted/modified files by this command')
 
 
 args = parser.parse_args()
