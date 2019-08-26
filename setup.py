@@ -3,7 +3,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-     name='changelog',  
+     name='cli-changelog',  
      version='1.1.0',
      scripts=['changelog'] ,
      author="Mathieu MARACHE",

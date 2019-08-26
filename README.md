@@ -2,6 +2,12 @@
 
 This tool is aiming at reducing conflicts in trunk-based or feature-based git developement.
 
+## Install
+
+```shell
+> pip install cli_changelog
+```
+
 ## Usage
 
 ```text
@@ -26,8 +32,8 @@ optional arguments:
 ## Flow example 
 
 ```shell
-> python changelog.py -c "Initial import" -f init
-> python changelog.py -c "Added readme content" -f readme
+> changelog -c "Initial import" -f init
+> changelog -c "Added readme content" -f readme
 ```
 
 will give this layout
@@ -46,7 +52,7 @@ will give this layout
 And now releasing version 1.0.0 like this
 
 ```shell
-> python changelog.py -r 1.0.0
+> changelog -r 1.0.0
 ```
 
 will give this layout
