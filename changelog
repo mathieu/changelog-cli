@@ -37,7 +37,8 @@ if args.create == args.release:
 
 filename = args.filename
 if filename == None:
-    head = subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+    head = subprocess.check_output(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode('utf-8')
     filename = head.split('/').pop().rstrip()
 
 filename += '.md'
