@@ -4,6 +4,7 @@ import os
 import argparse
 import subprocess
 import datetime
+from subprocess import call, STDOUT
 
 unreleased_path='changelogs/unreleased'
 changelog_filepath='CHANGELOG.md'
@@ -35,15 +36,24 @@ if args.create == args.release:
     parser.print_help()
     exit(1)
 
-filename = args.filename
-if filename == None:
-    head = subprocess.check_output(
-        ["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode('utf-8')
-    filename = head.split('/').pop().rstrip()
-
-filename += '.md'
+git = True
+if call(["git", "branch"], stderr=STDOUT, stdout=open(os.devnull, 'w')) != 0:
+    git = False
 
 if args.create:
+    filename = args.filename
+    if filename == None:
+        if git:
+            head = subprocess.check_output(
+                ["git", "rev-parse", "--abbrev-ref", "HEAD"]).decode('utf-8')
+            filename = head.split('/').pop().rstrip()
+        else:
+            print('Need a filename in non git repositories: \'-f\' or \'--filename\'')
+            parser.print_help()
+            exit(1)
+
+    filename += '.md'
+
     if not os.path.isdir('changelogs/unreleased'):
         os.makedirs('changelogs/unreleased')
     
@@ -53,9 +63,10 @@ if args.create:
     f.write(args.create)
     f.close()
 
-    subprocess.check_output(['git', 'add', changelog_entry_filepath])
+    if git:
+        subprocess.check_output(['git', 'add', changelog_entry_filepath])
 
-    if args.commit:
+    if git and args.commit:
         subprocess.check_output(['git', 'commit', '-m', 'Created changelog entry', changelog_entry_filepath])
 
     print('Changelog entry added to \'%s\'' % changelog_entry_filepath)
@@ -74,19 +85,26 @@ if args.release:
 
     changelog += '\n\n'
 
-    f = open(changelog_filepath, 'r')
-    changelog += f.read()
-    f.close()
+    if os.path.exists(changelog_filepath):
+        f = open(changelog_filepath, 'r')
+        changelog += f.read()
+        f.close()
+        
     f = open(changelog_filepath, 'w')
     f.write(changelog)
     f.close()
-    subprocess.check_output(['git', 'add', changelog_filepath])
+
+    if git:
+        subprocess.check_output(['git', 'add', changelog_filepath])
 
     for root, dirs, files in os.walk('changelogs/unreleased'):
         for filename in files:
-            subprocess.check_output(['git', 'rm', '-f', 'changelogs/unreleased/%s' % filename])
+            if git:
+                subprocess.check_output(['git', 'rm', '-f', 'changelogs/unreleased/%s' % filename])
+            else:
+                os.remove('changelogs/unreleased/%s' % filename)
 
-    if args.commit:
+    if git and args.commit:
         subprocess.check_output(['git', 'commit', '-m', 'Created release entry for %s' % args.release, changelog_filepath])
         
     print('Changelog entry for release \'%s\' added to changelog file \'%s\'' % (args.release, changelog_filepath))
