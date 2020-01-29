@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
      name='cli-changelog',  
-     version='1.2.0',
+     version='1.3.0',
      scripts=['changelog'] ,
      author="Mathieu MARACHE",
      author_email="mathieu@marache.com",
